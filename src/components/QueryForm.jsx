@@ -84,7 +84,7 @@ const QueryForm = ({ setResponse, setError }) => {
       {/* Input Section */}
       <form
         onSubmit={handleSubmit}
-        className="flex border-gray-300 bg-white rounded-lg shadow-lg"
+        className="flex border-gray-300 bg-white rounded-lg shadow-lg mt-2"
       >
         <input
           type="text"
