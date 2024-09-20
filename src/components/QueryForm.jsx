@@ -106,7 +106,7 @@ const QueryForm = ({ setResponse, setError }) => {
         />
         <button
           type="submit"
-          className="bg-gradient-to-r from-purple-700 to-pink-600 text-white font-semibold py-3 px-8 hover:from-pink-700 hover:to-purple-600 transition duration-300 ease-in-out rounded-lg"
+          className="bg-gradient-to-r from-purple-700 to-pink-600 text-white font-semibold py-2 px-6 hover:from-pink-700 hover:to-purple-600 transition duration-300 ease-in-out rounded-lg"
         >
           Send
         </button>
