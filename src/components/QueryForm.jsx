@@ -57,9 +57,9 @@ const QueryForm = ({ setResponse, setError }) => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg flex flex-col text-white">
+    <div className="h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg flex flex-col">
       {/* Chatbox Section */}
-      <div className="flex-1 overflow-y-auto mb-4 p-4 bg-white rounded-lg shadow-inner text-gray-800">
+      <div className="flex-1 overflow-y-auto p-4 bg-white rounded-lg shadow-inner text-gray-800">
         {messages.map((msg, index) => (
           <div
             key={index}
