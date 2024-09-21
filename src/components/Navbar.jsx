@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logo from "../assets/logo.jpeg"; // Adjust the path as necessary
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,25 +12,29 @@ const Navbar = () => {
     <nav className="bg-gray-100 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="text-blue-600 text-2xl font-bold">Name</div>
+          {/* Image Logo */}
+          <div className="flex items-center">
+            <img src={logo} alt="Logo" className="h-10 w-10 mr-1" />
+            <span className="text-gray-600 text-2xl font-bold">Name</span>
+          </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex space-x-6 text-center ">
             <a
               href="#why-us"
-              className="text-gray-600 hover:text-blue-600 transition duration-300"
+              className="text-gray-600 hover:text-blue-600 transition duration-300 md:mt-2"
             >
               Why Us
             </a>
             <a
               href="#subscribe"
-              className="text-gray-600 hover:text-blue-600 transition duration-300"
+              className="text-gray-600 hover:text-blue-600 transition duration-300 md:mt-2 bg-fuchsia-400"
             >
               Subscribe Us on Telegram
             </a>
             <a
-              href="#chat"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
+              href="/query"
+              className="bg-blue-600 text-white md:mb-2 px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
             >
               Chat for Free
             </a>
