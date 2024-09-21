@@ -28,7 +28,7 @@ const Navbar = () => {
             </a>
             <a
               href="#subscribe"
-              className="text-gray-600 hover:text-blue-600 transition duration-300 md:mt-2 bg-fuchsia-400"
+              className="text-gray-600 hover:text-blue-600 transition duration-300 md:mt-2"
             >
               Subscribe Us on Telegram
             </a>
