@@ -260,10 +260,10 @@ const QueryForm = ({ setResponse, setError }) => {
             <button
               type="submit"
               className="ml-4 bg-white text-black p-2 rounded-lg hover:bg-gray-200 flex items-center justify-center"
-              disabled={isSending} // Disable button while sending
+              disabled={isSending} 
             >
               {isSending ? (
-                "Sending..." // Show "Sending..." text while sending
+                "Sending..." 
               ) : (
                 <FontAwesomeIcon
                   icon={faPaperPlane}
