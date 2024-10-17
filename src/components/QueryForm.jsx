@@ -43,7 +43,7 @@ const QueryForm = ({ setResponse, setError }) => {
   const handleNewChat = () => {
     const newChat = {
       id: Date.now(),
-      title: `Chat ${chatSessions.length + 1}`,
+      title: `New Chat`, // Default title until first message is sent
       messages: [],
     };
     setChatSessions((prevChats) => [...prevChats, newChat]);
@@ -88,10 +88,17 @@ const QueryForm = ({ setResponse, setError }) => {
 
       setMessages(finalMessages);
 
+      // Update chat title with first message or keep it if already set
       setChatSessions((prevChats) =>
         prevChats.map((chat) =>
           chat.id === currentChatId
-            ? { ...chat, messages: finalMessages }
+            ? {
+                ...chat,
+                title: chat.messages.length > 0
+                  ? chat.title
+                  : userMessage.text.substring(0, 20), // Use the first 20 characters of the first message as title
+                messages: finalMessages,
+              }
             : chat
         )
       );
@@ -166,8 +173,8 @@ const QueryForm = ({ setResponse, setError }) => {
                 }`}
                 onClick={() => handleChatHistoryClick(chat.id)}
               >
-                {chat.title.length > 12
-                  ? `${chat.title.substring(0, 12)}...`
+                {chat.title.length > 20
+                  ? `${chat.title.substring(0, 20)}...`
                   : chat.title}
               </span>
               <button
@@ -259,17 +266,12 @@ const QueryForm = ({ setResponse, setError }) => {
             />
             <button
               type="submit"
-              className="ml-4 bg-white text-black p-2 rounded-lg hover:bg-gray-200 flex items-center justify-center"
-              disabled={isSending} 
+              className={`ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 ${
+                isSending ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isSending} // Disable button while sending
             >
-              {isSending ? (
-                "Sending..." 
-              ) : (
-                <FontAwesomeIcon
-                  icon={faPaperPlane}
-                  className="h-6 w-6 text-black"
-                />
-              )}
+              <FontAwesomeIcon icon={faPaperPlane} />
             </button>
           </div>
         </form>
