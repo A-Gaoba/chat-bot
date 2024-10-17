@@ -1,17 +1,15 @@
 import { useState } from "react";
 import QueryForm from "../components/QueryForm";
-// import MessageDisplay from "../components/MessageDisplay";
 
 const QueryPage = () => {
   const [response, setResponse] = useState("");
   const [error, setError] = useState("");
 
   return (
-    <div className="max-h-screen bg-gray-100 p-1">
-      <div className="container mx-auto">
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg">
+    <div className="h-screen w-screen bg-gray-900 flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full">
           <QueryForm setResponse={setResponse} setError={setError} />
-          {/* <MessageDisplay message={response} error={error} /> */}
         </div>
       </div>
     </div>

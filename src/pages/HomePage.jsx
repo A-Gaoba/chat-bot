@@ -20,7 +20,7 @@ const HomePage = () => {
       </div>
 
       {/* Main Content (Hero Section) */}
-      <div className="relative z-20 h-full flex flex-col justify-center items-center md:items-stretch bg-white bg-opacity-80 px-4 md:px-16">
+      <div className="relative z-20 h-full flex flex-col justify-center items-center md:items-stretch bg-gray-900 bg-opacity-90 px-4 md:px-16">
         <section className="flex flex-col md:flex-row items-center md:items-start space-y-8 md:space-y-0 md:space-x-8 w-full">
           {/* Text Content */}
           <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left space-y-3">
@@ -29,11 +29,11 @@ const HomePage = () => {
                 API Interaction Portal
               </h1>
             </header>
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-800">
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-gray-200">
               Welcome to <span className="text-orange-400">Our API</span>{" "}
               Interaction Portal
             </h2>
-            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-gray-600">
+            <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-gray-400">
               We simplify interactions with our API and deliver data instantly,
               empowering your applications with seamless integration.
             </p>

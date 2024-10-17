@@ -9,31 +9,31 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-100 shadow-lg">
+    <nav className="bg-gray-900 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Image Logo */}
           <div className="flex items-center">
             <img src={logo} alt="Logo" className="h-10 w-10 mr-1" />
-            <span className="text-gray-600 text-2xl font-bold">Name</span>
+            <span className="text-gray-200 text-2xl font-bold">Name</span>
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6 text-center ">
             <a
               href="#why-us"
-              className="text-gray-600 hover:text-blue-600 transition duration-300 md:mt-2"
+              className="text-gray-200 hover:text-blue-400 transition duration-300 md:mt-2"
             >
               Why Us
             </a>
             <a
               href="#subscribe"
-              className="text-gray-600 hover:text-blue-600 transition duration-300 md:mt-2"
+              className="text-gray-200 hover:text-blue-400 transition duration-300 md:mt-2"
             >
               Subscribe Us on Telegram
             </a>
             <a
-              href="/query"
+              href="query"
               className="bg-blue-600 text-white md:mb-2 px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
             >
               Chat for Free
@@ -41,7 +41,7 @@ const Navbar = () => {
           </div>
 
           {/* Hamburger Menu (Mobile) */}
-          <button className="md:hidden text-gray-600" onClick={toggleMenu}>
+          <button className="md:hidden text-gray-200" onClick={toggleMenu}>
             <svg
               className="w-6 h-6"
               fill="none"
@@ -62,16 +62,16 @@ const Navbar = () => {
 
       {/* Mobile Dropdown Menu */}
       {isOpen && (
-        <div className="md:hidden bg-gray-100 pb-4">
+        <div className="md:hidden bg-gray-900 pb-4">
           <a
             href="#why-us"
-            className="block text-gray-600 hover:text-blue-600 px-4 py-2 transition duration-300"
+            className="block text-gray-200 hover:text-blue-400 px-4 py-2 transition duration-300"
           >
             Why Us
           </a>
           <a
             href="#subscribe"
-            className="block text-gray-600 hover:text-blue-600 px-4 py-2 transition duration-300"
+            className="block text-gray-200 hover:text-blue-400 px-4 py-2 transition duration-300"
           >
             Subscribe Us on Telegram
           </a>
