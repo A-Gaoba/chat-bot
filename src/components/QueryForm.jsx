@@ -3,35 +3,54 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { postQuery } from "../api";
 
-const suggestions = [
-  "What is AI?",
-  "Tell me a joke",
-  "Explain quantum computing",
-  "What is the weather today?",
-];
-
 const QueryForm = ({ setResponse, setError }) => {
   const navigate = useNavigate();
   const [topic, setTopic] = useState("");
-  const [messages, setMessages] = useState(() => {
-    const savedMessages = localStorage.getItem("chatMessages");
-    return savedMessages ? JSON.parse(savedMessages) : [];
+  const [messages, setMessages] = useState([]);
+  const [chatSessions, setChatSessions] = useState(() => {
+    const savedChats = localStorage.getItem("chatSessions");
+    return savedChats ? JSON.parse(savedChats) : [];
   });
-  const [showSuggestions, setShowSuggestions] = useState(true);
+  const [currentChatId, setCurrentChatId] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true); // Suggestions visibility
+
+  const suggestions = [
+    "What is AI?",
+    "Tell me a joke.",
+    "How can I improve my coding skills?",
+    "What's the weather like today?",
+  ];
 
   useEffect(() => {
-    localStorage.setItem("chatMessages", JSON.stringify(messages));
-  }, [messages]);
+    if (currentChatId) {
+      const currentChat = chatSessions.find((chat) => chat.id === currentChatId);
+      if (currentChat) {
+        setMessages(currentChat.messages);
+      }
+    }
+  }, [currentChatId, chatSessions]);
 
-  const handleSuggestionClick = (suggestion) => {
-    setTopic(suggestion);
-    setShowSuggestions(false);
+  useEffect(() => {
+    localStorage.setItem("chatSessions", JSON.stringify(chatSessions));
+  }, [chatSessions]);
+
+  const handleNewChat = () => {
+    const newChat = {
+      id: Date.now(),
+      title: `Chat ${chatSessions.length + 1}`,
+      messages: [],
+    };
+    setChatSessions((prevChats) => [...prevChats, newChat]);
+    setCurrentChatId(newChat.id);
+    setMessages([]);
+    setShowSuggestions(true); // Show suggestions for new chats
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setShowSuggestions(false);
+    setShowSuggestions(false); // Hide suggestions after the first message
 
     const userMessage = {
       text: topic,
@@ -41,7 +60,9 @@ const QueryForm = ({ setResponse, setError }) => {
         minute: "2-digit",
       }),
     };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
 
     try {
       const data = await postQuery(topic);
@@ -53,8 +74,19 @@ const QueryForm = ({ setResponse, setError }) => {
           minute: "2-digit",
         }),
       };
+
       setResponse(data["AI Answer"]);
-      setMessages((prevMessages) => [...prevMessages, botMessage]);
+      const finalMessages = [...updatedMessages, botMessage];
+
+      setMessages(finalMessages);
+
+      setChatSessions((prevChats) =>
+        prevChats.map((chat) =>
+          chat.id === currentChatId
+            ? { ...chat, messages: finalMessages }
+            : chat
+        )
+      );
     } catch (error) {
       const errorMessage = error.message || "An unexpected error occurred.";
       setError(errorMessage);
@@ -66,42 +98,99 @@ const QueryForm = ({ setResponse, setError }) => {
           minute: "2-digit",
         }),
       };
-      setMessages((prevMessages) => [...prevMessages, errorBotMessage]);
+      const finalMessages = [...updatedMessages, errorBotMessage];
+      setMessages(finalMessages);
+
+      setChatSessions((prevChats) =>
+        prevChats.map((chat) =>
+          chat.id === currentChatId
+            ? { ...chat, messages: finalMessages }
+            : chat
+        )
+      );
     }
 
     setTopic("");
   };
 
+  const handleChatHistoryClick = (chatId) => {
+    setCurrentChatId(chatId);
+    setIsSidebarOpen(false); // Close sidebar on mobile
+    setShowSuggestions(false); // Hide suggestions when switching to an existing chat
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setTopic(suggestion); // Fill input with the suggestion
+  };
+
   return (
-    <div className="flex flex-col h-screen w-full bg-gray-900 p-4 md:p-6">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="bg-gray-800 text-white py-2 px-4 rounded-full mb-4 hover:bg-gray-700 transition duration-300"
+    <div className="flex flex-col lg:flex-row h-screen w-full bg-gray-900">
+      {/* Sidebar Section */}
+      <div
+        className={`${
+          isSidebarOpen ? "block" : "hidden"
+        } lg:block bg-gray-800 w-full lg:w-64 p-4 border-r border-gray-700 lg:flex-shrink-0`}
       >
-        Back
-      </button>
+        <h2 className="text-white mb-4">Chat History</h2>
+        <button
+          onClick={handleNewChat}
+          className="bg-green-500 text-white py-2 px-4 rounded-lg mb-4 w-full hover:bg-green-600"
+        >
+          + New Chat
+        </button>
+        <ul className="space-y-2">
+          {chatSessions.map((chat) => (
+            <li
+              key={chat.id}
+              className={`cursor-pointer bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-md ${
+                chat.id === currentChatId ? "bg-gray-600" : ""
+              }`}
+              onClick={() => handleChatHistoryClick(chat.id)}
+            >
+              {chat.title}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      {/* Chat Container */}
-      <div className="flex flex-col flex-1 w-full bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-        {showSuggestions && (
-          <div className="bg-gray-700 p-4 mb-4 rounded-lg">
-            <h3 className="text-white text-lg mb-2">Suggestions:</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {suggestions.map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleSuggestionClick(suggestion)}
-                  className="bg-gray-600 hover:bg-gray-500 text-white text-sm px-4 py-2 rounded-lg text-left"
-                >
-                  {suggestion}
-                </button>
-              ))}
+      {/* Main Chat Section */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 bg-gray-800 border-b border-gray-700">
+          <button
+            onClick={() => navigate(-1)}
+            className="bg-gray-700 text-white py-2 px-4 rounded-lg"
+          >
+            Back
+          </button>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="lg:hidden bg-gray-700 text-white py-2 px-4 rounded-lg"
+          >
+            {isSidebarOpen ? "Close History" : "Open History"}
+          </button>
+        </div>
+
+        {/* Chat Content */}
+        <div className="flex-1 overflow-y-auto p-4 bg-gray-900 space-y-4">
+          {/* Show suggestions when starting a new chat */}
+          {showSuggestions && messages.length === 0 && (
+            <div className="mb-4">
+              <h3 className="text-white mb-2">Suggestions:</h3>
+              <ul className="space-y-2">
+                {suggestions.map((suggestion, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="bg-gray-700 text-white py-2 px-4 rounded-lg w-full text-left hover:bg-gray-600"
+                    >
+                      {suggestion}
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        )}
-
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          )}
           {messages.map((msg, index) => (
             <div
               key={index}
