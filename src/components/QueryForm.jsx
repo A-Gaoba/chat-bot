@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { postQuery } from "../api";
 
@@ -14,6 +16,7 @@ const QueryForm = ({ setResponse, setError }) => {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [isSending, setIsSending] = useState(false); // Track request state
 
   const suggestions = [
     "What is AI?",
@@ -51,8 +54,11 @@ const QueryForm = ({ setResponse, setError }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSending) return; // Prevent multiple submissions
+
     setError("");
     setShowSuggestions(false);
+    setIsSending(true); // Start sending the request
 
     const userMessage = {
       text: topic,
@@ -112,6 +118,7 @@ const QueryForm = ({ setResponse, setError }) => {
       );
     }
 
+    setIsSending(false); // Request completed
     setTopic("");
   };
 
@@ -248,12 +255,18 @@ const QueryForm = ({ setResponse, setError }) => {
               placeholder="Type a message..."
               className="flex-1 bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none"
               required
+              disabled={isSending} // Disable input while sending
             />
             <button
               type="submit"
-              className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+              className="ml-4 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 flex items-center justify-center"
+              disabled={isSending} // Disable button while sending
             >
-              Send
+              {isSending ? (
+                "Sending..." 
+              ) : (
+                <FontAwesomeIcon icon={faPaperPlane} className="h-6 w-6" />
+              )}
             </button>
           </div>
         </form>
