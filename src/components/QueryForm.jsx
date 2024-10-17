@@ -259,13 +259,16 @@ const QueryForm = ({ setResponse, setError }) => {
             />
             <button
               type="submit"
-              className="ml-4 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 flex items-center justify-center"
+              className="ml-4 bg-white text-black p-2 rounded-lg hover:bg-gray-200 flex items-center justify-center"
               disabled={isSending} // Disable button while sending
             >
               {isSending ? (
-                "Sending..." 
+                "Sending..." // Show "Sending..." text while sending
               ) : (
-                <FontAwesomeIcon icon={faPaperPlane} className="h-6 w-6" />
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  className="h-6 w-6 text-black"
+                />
               )}
             </button>
           </div>
